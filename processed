@@ -1,0 +1,62 @@
+/* variable names and types */
+proc contents data=credit_raw;
+run;
+
+/* first 10 observations */
+proc print data=credit_raw(obs=10);
+run;
+
+/* how many borrowers belong to each raw risk class */
+proc freq data=credit_raw;
+    tables kredit;
+run;
+
+data credit_clean;
+    set credit_raw;
+
+    /* based on the raw data 
+       kredit = 1 (good customer) default = 0
+       kredit = 0 (bad customer) default = 1 */
+
+    if kredit = 0 then default = 1;
+    else if kredit = 1 then default = 0;
+
+    if alter < 25 then age_group = "Young";
+    else if alter < 45 then age_group = "Middle";
+    else age_group = "Older";
+
+    if hoehe = . then loan_tier = "Missing";
+    else if hoehe < 2000 then loan_tier = "1. Low (<2k)";
+    else if hoehe >= 2000 and hoehe <= 5000 then loan_tier = "2. Medium (2k-5k)";
+    else loan_tier = "3. High (>5k)";
+run;
+
+/* the new target variable and age groups */
+proc freq data=credit_clean;
+    tables default age_group loan_tier;
+run;
+
+/* missing values for numeric variables */
+proc means data=credit_clean n nmiss;
+run;
+
+/* freq tables for all categorical variables */
+proc freq data=credit_clean;
+    tables _character_;
+run;
+
+/* summary stats for continuous variables */
+/* alter (age), hoehe (loan amount), laufzeit (duration) */
+proc means data=credit_clean;
+    var alter hoehe laufzeit;
+run;
+
+/* does age affect default, cross age_group and default against each other to form a grid */
+proc freq data=credit_clean;
+    tables age_group*default;
+run;
+
+
+data credit_final;
+    set credit_clean;
+run;

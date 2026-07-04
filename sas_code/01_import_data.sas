@@ -1,6 +1,6 @@
 /* Reading CSV file from GitHub,having credcsv fileref for it */
 filename credcsv url
-"https://github.com/manemln/Credit_Risk_Analysis_Loan_Default_Prediction_Using_SAS/blob/main/data/raw/.gitkeep";
+"https://raw.githubusercontent.com/manemln/Credit_Risk_Analysis_Loan_Default_Prediction_Using_SAS/main/data/raw/german_credit_data.csv";
 
 /* Importing CSV file into SAS */
 

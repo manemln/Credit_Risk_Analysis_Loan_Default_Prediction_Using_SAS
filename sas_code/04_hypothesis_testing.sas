@@ -16,6 +16,12 @@
    Risk has two groups: "Risk" and "No Risk"
    Using t-tests to compare mean Age, LoanAmount, and
    LoanDuration between the two credit risk groups
+
+   case of equal variances: Pooled method
+   case of unequal variances: Satterthwaite method
+   
+   Checking if Fstat <= Fcrit or equivalently p-value>= 0.05: Variances are not significantly different. Pooled 
+   If F statistic > F critical, or equivalently p-value < 0.05:Variances are significantly different. Satterthwaite
  */
 
 

@@ -107,7 +107,7 @@ run;
 title "Distribution of Borrower Age";
 proc sgplot data=work.cred_eda;
     histogram Age;
-    density Age;
+    density Age; /* adds normal dist density curve, so to see the histogram and the normal dist together and compare easier */
     xaxis label="Borrower Age";
     yaxis label="Frequency";
 run;

@@ -45,41 +45,122 @@ proc ttest data=work.cred_clean;
     var Age;    /* numeric variable whose mean is compared between groups */
 run;
 
+/* Is borrower age connected to credit risk?
 
-/* Test 2: Loan Amount and Credit Risk
+   Descriptive results
+   The No Risk group has 3330 borrowers with a mean age of 32.56. The Risk group has 1670 borrowers with a mean age of 42.86.
+   This means that, in this dataset, borrowers classified as Risk are older on average than borrowers classified as No Risk.
+   The mean difference is approximately -10.48 when calculated as: No Risk mean age - Risk mean age
+   As the difference is negative, it shows that the Risk group has the higher average age. In practical terms, Risk borrowers are
+   about 10.48 years older on average than No Risk borrowers.
 
-   Research question:
-   Do risky borrowers request or receive different loan amounts?
+   Equality of variances
+   SAS reports the equality of variances test using the Folded F test.
+       Folded F = 1.05
+       Pr > F = 0.2350
+   The p-value for the equality of variances test is 0.2350, which is greater than alpha = 0.05. 
+   Therefore, we do not reject H0 for the variance test.
+   Hence, not enough evidence that the two group variances are significantly different.
+   Since the variances are not significantly different, the Pooled row should be used for interpreting the t-test.
 
-   Why this question matters:
-   Loan amount is important for lender exposure. If risky borrowers
-   tend to have larger loan amounts, lenders may face higher financial
-   loss if those borrowers default.
+   T-test result from the Pooled row
+       t-Value = -36.73
+       Pr > |t| < .0001
+   The p-value is less than 0.05, so we reject the null hypothesis.
+   Hence, there is statistically significant evidence that mean borrower age differs between the Risk and No Risk groups.
 
-   Variables:
-   Risk       = categorical variable with 2 groups
+   Confidence interval
+   The 95% confidence interval for the mean difference is approximately: -10.96 to -9.85
+   The interval does not include 0, which supports the conclusion that
+   the age difference between the two risk groups is statistically significant. 
+   Since the entire interval is negative, it confirms that
+   the No Risk group has a lower mean age than the Risk group.
+
+   Visual interpretation
+   The histogram also supports the t-test result. 
+   The age distribution for the Risk group is shifted to the right compared with the No Risk
+   group, meaning that older borrowers are more common among risky borrowers.
+
+   The Q-Q plots show that age is not perfectly normally distributed,
+   especially at the tails, but the points are reasonably close to the diagonal line.
+   Also, both groups have large sample sizes, so the t-test is fairly robust.
+
+   Final conclusion
+   Borrower age is significantly associated with credit risk in this dataset. 
+   Risk borrowers are substantially older on average than No Risk borrowers.
+   This suggests that age may be an important factor for borrower risk segmentation and should be considered in later
+   modeling and business interpretation.*/
+
+/* test 2: Do risky borrowers request or receive different loan amounts?
+
+   Why the question matters
+   Loan amount is important for lender exposure. If risky borrowers tend to have larger loan amounts, 
+   lenders may face higher financial loss if those borrowers default.
+
+   Variables
+   Risk = categorical variable with 2 groups
    LoanAmount = numeric variable
 
-   Test type:
+   Test type
    Independent samples t-test
-
    H0: Mean loan amount is equal for Risk and No Risk borrowers.
    H1: Mean loan amount is different for Risk and No Risk borrowers.
-
-   Interpretation:
-   If Pr > |t| < 0.05, loan amount differs significantly between
-   the two risk groups.
-   ============================================================ */
+   If (Pr > |t|) = p-value < 0.05 loan amount differs significantly between the two risk groups.
+   */
 
 title "T-Test 2: Loan Amount Difference by Credit Risk";
-
 proc ttest data=work.cred_clean;
     class Risk;
     var LoanAmount;
 run;
 
+/* Descriptive results
+   The No Risk group has 3330 borrowers with a mean loan amount of 2686.9.
+   The Risk group has 1670 borrowers with a mean loan amount of 5062.0.
+   This means that borrowers classified as Risk have substantially higher
+   loan amounts on average than borrowers classified as No Risk.
+   The mean difference is approximately -2375.1 when calculated as: No Risk mean loan amount - Risk mean loan amount
+   Because the difference is negative, it shows that the Risk group has the higher average loan amount.
 
-/* ============================================================
+   Equality of variances
+   SAS reports the equality of variances test using the Folded F test.
+       Folded F = 1.14, Pr > F = 0.0016
+   Since Pr > F = 0.0016 is less than alpha = 0.05, we reject H0 for the equality of variances test. 
+   This means that the variances are significantly different.
+
+   Therefore, the Satterthwaite row should be used for interpreting the t-test.
+   T-test result from the Satterthwaite row: t Value = -34.87, Pr > |t| < .0001
+   Since the p-value is less than 0.05, we reject the null hypothesis.
+   Hence, there is statistically significant evidence that mean loan amount differs between the Risk and No Risk groups.
+
+   The 95% confidence interval for the mean difference is approximately: -2508.7 to -2241.6
+   Interval does not include 0, which supports the conclusion that loan amount difference is statistically significant. 
+   Since the entire interval is negative, it confirms that the No Risk group has lower mean loan amount than the Risk group.
+
+   Visual interpretation
+   The histogram and boxplot show that the Risk group is shifted toward higher loan amounts compared with the No Risk group. 
+   Larger loans are more common among borrowers classified as Risk.
+
+   The Q-Q plots show that LoanAmount is not perfectly normally distributed, especially because of skewness and values near the minimum loan amount.
+   However, both groups have large sample sizes, so the t-test is fairly robust. Since variances are significantly different, using the
+   Satterthwaite row is appropriate.
+
+   Final conclusion
+   This result confirms an expected relationship that borrowers classified as Risk tend to have larger loan amounts.
+   Loan amount is significantly associated with credit risk in this dataset. Borrowers classified as Risk have much higher average loan amounts than
+   borrowers classified as No Risk. Although this relationship is not surprising, it is still important because
+   larger loan amounts increase lender exposure and potential financial loss.
+   Therefore, loan amount should be considered in later modeling and business recommendations.
+*/
+
+
+
+
+
+
+
+/*needs to be checked, not done YEEEEEEET -------------------------------*/
+/*
    Test 3: Loan Duration and Credit Risk
 
    Research question:
@@ -103,7 +184,7 @@ run;
    Interpretation:
    If Pr > |t| < 0.05, loan duration differs significantly between
    the two risk groups.
-   ============================================================ */
+ */
 
 title "T-Test 3: Loan Duration Difference by Credit Risk";
 
@@ -113,7 +194,7 @@ proc ttest data=work.cred_clean;
 run;
 
 
-/* ============================================================
+/*
    PART 2: CHI-SQUARE TESTS OF INDEPENDENCE
 
    Chi-square tests are used when:
@@ -133,10 +214,10 @@ run;
    If Pr > ChiSq >= 0.05:
        Do not reject H0.
        There is not enough evidence of association.
-   ============================================================ */
+ */
 
 
-/* ============================================================
+/* 
    Test 4: Age Group and Credit Risk
 
    Research question:
@@ -156,7 +237,7 @@ run;
 
    H0: Age group and credit risk are independent.
    H1: Age group and credit risk are associated.
-   ============================================================ */
+*/
 
 title "Chi-Square Test 1: Association Between Age Group and Credit Risk";
 
@@ -165,7 +246,7 @@ proc freq data=work.cred_clean;
 run;
 
 
-/* ============================================================
+/*
    Test 5: Loan Amount Group and Credit Risk
 
    Research question:
@@ -184,7 +265,7 @@ run;
 
    H0: Loan amount group and credit risk are independent.
    H1: Loan amount group and credit risk are associated.
-   ============================================================ */
+ */
 
 title "Chi-Square Test 2: Association Between Loan Amount Group and Credit Risk";
 
@@ -193,7 +274,7 @@ proc freq data=work.cred_clean;
 run;
 
 
-/* ============================================================
+/* 
    Test 6: Loan Duration Group and Credit Risk
 
    Research question:
@@ -213,7 +294,7 @@ run;
 
    H0: Loan duration group and credit risk are independent.
    H1: Loan duration group and credit risk are associated.
-   ============================================================ */
+  */
 
 title "Chi-Square Test 3: Association Between Loan Duration Group and Credit Risk";
 
@@ -222,7 +303,7 @@ proc freq data=work.cred_clean;
 run;
 
 
-/* ============================================================
+/* 
    Test 7: Credit History and Credit Risk
 
    Research question:
@@ -242,7 +323,7 @@ run;
 
    H0: Credit history and credit risk are independent.
    H1: Credit history and credit risk are associated.
-   ============================================================ */
+ */
 
 title "Chi-Square Test 4: Association Between Credit History and Credit Risk";
 
@@ -251,7 +332,7 @@ proc freq data=work.cred_clean;
 run;
 
 
-/* ============================================================
+/*
    Test 8: Checking Account Status and Credit Risk
 
    Research question:
@@ -270,7 +351,7 @@ run;
 
    H0: Checking account status and credit risk are independent.
    H1: Checking account status and credit risk are associated.
-   ============================================================ */
+  */
 
 title "Chi-Square Test 5: Association Between Checking Status and Credit Risk";
 
@@ -279,7 +360,7 @@ proc freq data=work.cred_clean;
 run;
 
 
-/* ============================================================
+/* 
    Test 9: Existing Savings and Credit Risk
 
    Research question:
@@ -298,7 +379,7 @@ run;
 
    H0: Existing savings status and credit risk are independent.
    H1: Existing savings status and credit risk are associated.
-   ============================================================ */
+ */
 
 title "Chi-Square Test 6: Association Between Existing Savings and Credit Risk";
 
@@ -307,7 +388,7 @@ proc freq data=work.cred_clean;
 run;
 
 
-/* ============================================================
+/*
    Test 10: Employment Duration and Credit Risk
 
    Research question:
@@ -326,7 +407,7 @@ run;
 
    H0: Employment duration and credit risk are independent.
    H1: Employment duration and credit risk are associated.
-   ============================================================ */
+    */
 
 title "Chi-Square Test 7: Association Between Employment Duration and Credit Risk";
 
@@ -335,7 +416,7 @@ proc freq data=work.cred_clean;
 run;
 
 
-/* ============================================================
+/* 
    PART 3: ONE-WAY ANOVA TESTS
 
    ANOVA is used when:
@@ -364,10 +445,10 @@ run;
 
    Welch ANOVA:
        Useful when equal variance assumption is questionable.
-   ============================================================ */
+ */
 
 
-/* ============================================================
+/* 
    ANOVA Test 1: Loan Amount by Credit History
 
    Research question:
@@ -391,7 +472,7 @@ run;
    Interpretation:
    Check Pr > F.
    If Pr > F < 0.05, reject H0.
-   ============================================================ */
+ */
 
 title "ANOVA Test 1: Loan Amount by Credit History";
 
@@ -403,7 +484,7 @@ run;
 quit;
 
 
-/* ============================================================
+/* 
    ANOVA Test 2: Loan Duration by Checking Account Status
 
    Research question:
@@ -427,7 +508,7 @@ quit;
    Interpretation:
    Check Pr > F.
    If Pr > F < 0.05, reject H0.
-   ============================================================ */
+ */
 
 title "ANOVA Test 2: Loan Duration by Checking Account Status";
 
@@ -439,7 +520,7 @@ run;
 quit;
 
 
-/* ============================================================
+/* 
    ANOVA Test 3: Loan Amount by Existing Savings
 
    Research question:
@@ -462,7 +543,7 @@ quit;
    Interpretation:
    Check Pr > F.
    If Pr > F < 0.05, reject H0.
-   ============================================================ */
+*/
 
 title "ANOVA Test 3: Loan Amount by Existing Savings";
 
@@ -474,7 +555,7 @@ run;
 quit;
 
 
-/* ============================================================
+/*
    ANOVA Test 4: Age by Employment Duration
 
    Research question:
@@ -497,7 +578,7 @@ quit;
    Interpretation:
    Check Pr > F.
    If Pr > F < 0.05, reject H0.
-   ============================================================ */
+ */
 
 title "ANOVA Test 4: Age by Employment Duration";
 
@@ -509,5 +590,5 @@ run;
 quit;
 
 
-/* Clear current title so it will not appear in later outputs */
+/* cleaning current title so it will not appear in later outputs */
 title;

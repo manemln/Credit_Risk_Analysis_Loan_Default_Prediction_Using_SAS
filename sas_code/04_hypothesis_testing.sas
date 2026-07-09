@@ -153,6 +153,20 @@ run;
    Therefore, loan amount should be considered in later modeling and business recommendations.
 */
 
+/*
+   test 3: Are longer loans connected to higher credit risk?
+   Longer repayment periods can increase uncertainty and may increase the chance of default. If risky borrowers have longer average loan
+   duration, duration becomes an important risk factor.
+
+   Variables used: Risk = categorical variable with 2 groups, LoanDuration = numeric variable
+
+   Test type:Independent samples t-test
+   H0: Mean loan duration is equal for Risk and No Risk borrowers.
+   H1: Mean loan duration is different for Risk and No Risk borrowers.
+
+   If (Pr > |t|) = p-value < 0.05, loan duration differs significantly between the two risk groups.
+ */
+
 
 
 
@@ -160,32 +174,6 @@ run;
 
 
 /*needs to be checked, not YEEEEEEET -------------------------------*/
-/*
-   Test 3: Loan Duration and Credit Risk
-
-   Research question:
-   Are longer loans connected to higher credit risk?
-
-   Why this question matters:
-   Longer repayment periods can increase uncertainty and may increase
-   the chance of default. If risky borrowers have longer average loan
-   duration, duration becomes an important risk factor.
-
-   Variables:
-   Risk         = categorical variable with 2 groups
-   LoanDuration = numeric variable
-
-   Test type:
-   Independent samples t-test
-
-   H0: Mean loan duration is equal for Risk and No Risk borrowers.
-   H1: Mean loan duration is different for Risk and No Risk borrowers.
-
-   Interpretation:
-   If Pr > |t| < 0.05, loan duration differs significantly between
-   the two risk groups.
- */
-
 title "T-Test 3: Loan Duration Difference by Credit Risk";
 
 proc ttest data=work.cred_clean;

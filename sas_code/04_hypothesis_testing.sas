@@ -168,18 +168,72 @@ run;
  */
 
 
-
-
-
-
-
-/*needs to be checked, not YEEEEEEET -------------------------------*/
 title "T-Test 3: Loan Duration Difference by Credit Risk";
 
 proc ttest data=work.cred_clean;
     class Risk;
     var LoanDuration;
 run;
+
+/* Descriptive results: The No Risk group has 3330 borrowers with a mean loan duration of 17.90.
+   The Risk group has 1670 borrowers with a mean loan duration of 28.36.
+   This means that, in this dataset, borrowers classified as Risk have longer loan durations on average than borrowers classified
+   as No Risk. The mean difference is approximately -10.46 when calculated as: No Risk mean loan duration - Risk mean loan duration
+   Because the difference is negative, it shows that the Risk group has the higher average loan duration. In practical terms, Risk
+   borrowers have loan durations about 10.46 units longer on average. If LoanDuration is measured in months, this means Risk borrowers
+   have loans about 10.46 months longer on average.
+
+   Equality of variances: SAS reports the equality of variances test using the Folded F test.
+   Folded F = 1.01, Pr > F = 0.8465 hence the p-value for the equality of variances test is 0.8465, which is
+   greater than alpha = 0.05. Therefore, we do not reject H0 for the variance test, 
+   hence there is not enough evidence that the two group variances are significantly different.
+
+   Since the variances are not significantly different, the Pooled row should be used for interpreting the t-test.
+   T-test result from the Pooled row: t Value = -34.84, Pr > |t| < .0001, we get p-value less than 0.05, so we reject the null hypothesis.
+   There is statistically significant evidence that mean loan duration differs between the Risk and No Risk groups.
+
+   Confidence interval:The 95% confidence interval for the mean difference is approximately: -11.05 to -9.87
+   The interval does not include 0, which supports the conclusion that the loan duration difference between the two risk groups is
+   statistically significant. Since the entire interval is negative, it confirms that No Risk has a lower mean loan duration than the Risk group.
+
+   Visual interpretation: The histogram and boxplot also support the t-test result. 
+   The Risk group distribution is shifted to the right compared with the No Risk group,
+   meaning that longer loan durations are more common among borrowers classified as Risk.
+   The boxplot shows that the center of the Risk group is higher than the center of the No Risk group. 
+   This supports the conclusion that Risk borrowers generally have longer repayment periods.
+
+   The Q-Q plots show that LoanDuration is not perfectly normally distributed, especially at the lower and upper tails. 
+   However,the points are reasonably close to the diagonal line in the middle of the distribution.
+   Also, both groups have large sample sizes, so the t-test is fairly robust.
+
+   In conclusion, loan duration is significantly associated with credit risk in this dataset. 
+   Borrowers classified as Risk have substantially longer loan durations on average than borrowers classified as No Risk.
+   This is an important insight as longer repayment periods create more uncertainty for lenders. 
+   The longer the loan remains active, the more time there is for changes in the borrower's financial situation, such as job loss, 
+   income instability, or other repayment difficulties. Therefore, loan duration should be considered an important variable in later recommendations.
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* not checked yet, to be continued */
 
 
 /*

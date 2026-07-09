@@ -159,7 +159,7 @@ run;
 
 
 
-/*needs to be checked, not done YEEEEEEET -------------------------------*/
+/*needs to be checked, not YEEEEEEET -------------------------------*/
 /*
    Test 3: Loan Duration and Credit Risk
 

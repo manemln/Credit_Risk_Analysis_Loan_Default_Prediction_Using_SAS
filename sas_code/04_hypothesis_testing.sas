@@ -214,68 +214,26 @@ run;
  */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* not checked yet, to be continued */
-
-
 /*
-   PART 2: CHI-SQUARE TESTS OF INDEPENDENCE
-
-   Chi-square tests are used when:
-       - both variables are categorical
-
-   In this project, we use chi-square tests to check whether
-   credit risk is associated with borrower categories such as
+   CHI-SQUARE TESTS OF INDEPENDENCE
+   Chi-square tests are used when both variables are categorical
+   In this project, we use chi-square tests to check whether credit risk is associated with borrower categories such as
    age group, credit history, savings status, and loan categories.
 
-   How to read SAS output:
-   Check the Pearson Chi-Square p-value, shown as Pr > ChiSq.
-
-   If Pr > ChiSq < 0.05:
-       Reject H0.
-       The two categorical variables are significantly associated.
-
-   If Pr > ChiSq >= 0.05:
-       Do not reject H0.
-       There is not enough evidence of association.
+   In SAS output need to check the Pearson Chi-Square p-value, shown as Pr > ChiSq.
+   If Pr > ChiSq < 0.05: Reject H0. 
+   If Pr > ChiSq >= 0.05: Do not reject H0.
  */
 
 
 /* 
-   Test 4: Age Group and Credit Risk
+   test 4: Is credit risk associated with borrower age category?
 
-   Research question:
-   Is credit risk associated with borrower age category?
+   Why this question matters: The t-test compares average age, but age groups are easier to
+   interpret for business decisions. This test helps identify whether certain age groups have different risk patterns.
 
-   Why this question matters:
-   The t-test compares average age, but age groups are easier to
-   interpret for business decisions. This test helps identify whether
-   certain age groups have different risk patterns.
-
-   Variables:
-   Age_Group = categorical variable
-   Risk      = categorical variable
-
-   Test type:
-   Chi-square test of independence
+   Variables: Age_Group = categorical variable, Risk = categorical variable
+   test type: Chi-square test of independence
 
    H0: Age group and credit risk are independent.
    H1: Age group and credit risk are associated.
@@ -287,7 +245,79 @@ proc freq data=work.cred_clean;
     tables Age_Group*Risk / chisq expected cellchi2;
 run;
 
+/* Interpretation: Is credit risk associated with borrower age category?
 
+   H0: Age group and credit risk are independent. This means the proportion of Risk and No Risk 
+   borrowers is the same across age groups.
+   H1: Age group and credit risk are associated. This means credit risk differs across age groups.
+
+   SAS reports several values inside each cell
+       Frequency = actual observed count
+       Expected  = expected count if Age_Group and Risk were independent
+       Cell Chi-Square = how much that cell contributes to the chi-square statistic
+       Percent = percent of the full dataset
+       Row Pct = percent within that age group
+       Col Pct = percent within that risk group
+
+   The most useful value for business interpretation here is Row Pct, because it shows the percentage of Risk and No Risk 
+   borrowers inside each age group.
+
+   Descriptive results by age group
+   For borrowers under 25
+       No Risk = 806 borrowers, Risk = 56 borrowers, Risk row percentage = 6.5%
+   Only 6.5% of borrowers under 25 are classified as Risk.
+
+   For borrowers aged 25 to 34: No Risk = 1175 borrowers, Risk = 274 borrower, Risk row percentage = 18.91%
+   hence 18.91% of borrowers aged 25 to 34 are classified as Risk.
+   For borrowers aged 35 to 49: No Risk = 1212 borrowers, Risk = 918 borrowers, Risk row percentage = 43.1%
+   This means that 43.1% of borrowers aged 35 to 49 are classified as Risk.
+   For borrowers aged 50 and above: No Risk = 137 borrowers, Risk = 422 borrowers, Risk row percentage = 75.49%
+   Hence 75.49% of borrowers aged 50 and above are classified as Risk.
+
+   Result is that the proportion of Risk borrowers increases strongly as age group increases.
+
+   Expected counts = show what SAS would expect if age group and risk were independent.
+
+   For example, in the 50 and above group: Expected No Risk count = 372.29, Actual No Risk count = 137
+   Expected Risk count = 186.71, Actual Risk count = 422
+   This means there are far more Risk borrowers aged 50 and above than would be expected if age group and risk were independent.
+
+   In the Under 25 group: Expected Risk count = 287.91, Actual Risk count = 56
+   This means there are far fewer Risk borrowers under 25 than would be expected if age group and risk were independent.
+
+   The Pearson Chi-Square result is: Chi-Square = 952.5608, DF = 3, Prob < .0001
+   The p-value is less than 0.05, so we reject the null hypothesis.
+   There is statistically significant evidence that Age_Group and Risk are associated.
+
+   Strength of association: Cramer's V = 0.4365
+   Cramer's V measures the strength of association between two categorical variables. 
+   A value around 0.44 suggests a moderate to strong association in this dataset.
+
+   In conclusion Age group is significantly associated with credit risk in this dataset.
+   The risk percentage increases across age groups, from 6.5% among
+   borrowers under 25 to 75.49% among borrowers aged 50 and above.
+   Older borrower groups, especially borrowers aged 50 and above, have a much higher proportion of Risk cases.
+   Therefore, Age_Group should be considered in later modeling and business recommendations.
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ /* not checked other part yet */
 /*
    Test 5: Loan Amount Group and Credit Risk
 

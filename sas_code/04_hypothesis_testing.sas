@@ -301,40 +301,11 @@ run;
  */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- /* not checked other part yet */
 /*
-   Test 5: Loan Amount Group and Credit Risk
-
-   Research question:
-   Is credit risk associated with loan amount category?
-
-   Why this question matters:
-   This helps determine whether low, medium, or high loan amounts
-   contain different proportions of risky borrowers.
-
-   Variables:
-   LoanAmount_Group = categorical variable
-   Risk             = categorical variable
-
-   Test type:
-   Chi-square test of independence
-
+   test 5: Is credit risk associated with loan amount category?
+   This helps determine whether low, medium, or high loan amounts contain different proportions of risky borrowers.
+   
+   Variables: LoanAmount_Group = categorical variable, Risk = categorical variable
    H0: Loan amount group and credit risk are independent.
    H1: Loan amount group and credit risk are associated.
  */

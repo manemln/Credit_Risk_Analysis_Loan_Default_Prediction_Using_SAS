@@ -316,6 +316,61 @@ proc freq data=work.cred_clean;
     tables LoanAmount_Group*Risk / chisq expected cellchi2;
 run;
 
+/* Interpretation: Is credit risk associated with loan amount category?
+   Hypotheses
+   H0: Loan amount group and credit risk are independent.
+       This means the proportion of Risk and No Risk borrowers is the same across low, medium, and high loan amount groups.
+
+   H1: Loan amount group and credit risk are associated.
+       This means credit risk differs across loan amount groups.
+
+  SAS values 
+       Frequency = actual observed count
+       Expected = expected count if LoanAmount_Group and Risk were independent
+       Cell Chi-Square = how much that cell contributes to the chi-square statistic
+       Percent = percent of the full dataset
+       Row Pct = percent within that loan amount group
+       Col Pct = percent within that risk group
+
+   The most useful value for interpretation is Row Pct = the percentage of Risk and No Risk borrowers inside
+   each loan amount group
+
+   Descriptive results
+   For the Low Amount group: No Risk = 1008 borrowers, Risk = 67 borrowers, Risk row percentage = 6.23%
+   This means that only 6.23% of borrowers in the Low Amount group are classified as Risk.
+
+   For the Medium Amount group: No Risk = 1756 borrowers, Risk = 718 borrowers, Risk row percentage = 29.02%
+   This means that 29.02% of borrowers in the Medium Amount group are classified as Risk.
+
+   For the High Amount group: No Risk = 566 borrowers, Risk = 885 borrowers, Risk row percentage = 60.99%
+   This means that 60.99% of borrowers in the High Amount group are classified as Risk.
+
+   pattern: the proportion of Risk borrowers increases strongly as the loan amount group increases.
+
+   in the High Amount group: Expected Risk count = 484.63, Actual Risk count = 885
+   This means there are far more Risk borrowers in the High Amount group than would be expected if loan amount group and credit risk were
+   independent.
+   In the Low Amount group: Expected Risk count = 359.05, Actual Risk count = 67
+   This means there are far fewer Risk borrowers in the Low Amount group than would be expected if loan amount group and credit risk were
+   independent.
+
+   Chi-square test result
+   The Pearson Chi-Square result is: Chi-Square = 874.6266 DF = 2 Prob < .0001
+   The p-value is less than 0.05, so we reject the null hypothesis.
+   There is statistically significant evidence that LoanAmount_Group and Risk are associated.
+
+   Strength of association: Cramer's V = 0.4182
+   A value around 0.42 suggests a moderate to strong association in this dataset.
+   
+   Loan amount group is significantly associated with credit risk in this dataset.
+   The percentage of Risk borrowers increases from 6.23% in the Low Amount group to 60.99% in the High Amount group.
+   This confirms an expected but important relationship: borrowers with
+   higher loan amounts are more likely to be classified as Risk. 
+   Although this is not surprising, it is important for business interpretation
+   because larger loan amounts increase lender exposure and potential financial loss.
+ */
+
+
 
 /* 
    Test 6: Loan Duration Group and Credit Risk

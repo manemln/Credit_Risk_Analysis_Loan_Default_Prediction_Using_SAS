@@ -373,23 +373,11 @@ run;
 
 
 /* 
-   Test 6: Loan Duration Group and Credit Risk
+   test 6: Is credit risk associated with loan duration category?
+   Longer loans may be riskier because repayment uncertainty increases over time. 
+   This test checks whether short, medium, and long-term loans have different risk patterns.
 
-   Research question:
-   Is credit risk associated with loan duration category?
-
-   Why this question matters:
-   Longer loans may be riskier because repayment uncertainty increases
-   over time. This test checks whether short, medium, and long-term
-   loans have different risk patterns.
-
-   Variables:
-   LoanDuration_Group = categorical variable
-   Risk               = categorical variable
-
-   Test type:
-   Chi-square test of independence
-
+   Variables: LoanDuration_Group = categorical variable, Risk = categorical variable
    H0: Loan duration group and credit risk are independent.
    H1: Loan duration group and credit risk are associated.
   */
@@ -400,34 +388,206 @@ proc freq data=work.cred_clean;
     tables LoanDuration_Group*Risk / chisq expected cellchi2;
 run;
 
+/* Interpretation:Is credit risk associated with loan duration category?
+   Test type: Chi-square test of independence
+   Variables: LoanDuration_Group = categorical variable, Risk = categorical variable
 
+   Hypotheses
+   H0: Loan duration group and credit risk are independent.
+       This means the proportion of Risk and No Risk borrowers is the same across short-term, medium-term, and long-term loans.
+   H1: Loan duration group and credit risk are associated. This means credit risk differs across loan duration groups.
+
+   Descriptive results 
+   For the Short Term group: No Risk = 1137 borrowers, Risk = 105 borrowers, Risk row percentage = 8.45%
+   This means that only 8.45% of borrowers in the Short Term group are classified as Risk.
+   For the Medium Term group: No Risk = 1279 borrowers, Risk = 434 borrowers, Risk row percentage = 25.34%
+   This means that 25.34% of borrowers in the Medium Term group are classified as Risk.
+   For the Long Term group: No Risk = 914 borrowers, Risk = 1131 borrowers, Risk row percentage = 55.31%
+   This means that 55.31% of borrowers in the Long Term group are classified as Risk.
+
+   pattern: the proportion of Risk borrowers increases strongly as loan duration increases
+
+   In the Long Term group: Expected Risk count = 683.08, Actual Risk count = 1131
+   This means there are far more Risk borrowers in the Long Term group
+   than would be expected if loan duration group and credit risk were independent.
+   In the Short Term group: Expected Risk count = 414.83, Actual Risk count = 105
+   This means there are far fewer Risk borrowers in the Short Term group
+   than would be expected if loan duration group and credit risk were independent.
+
+   Chi-square test result
+   The Pearson Chi-Square result is: Chi-Square = 838.6840 DF = 2 Prob < .0001
+   The p-value is less than 0.05, so we reject the null hypothesis.
+   There is statistically significant evidence that LoanDuration_Group and Risk are associated.
+
+   Strength of association: Cramer's V = 0.4096
+   A value around 0.41 suggests a moderate to strong association in this dataset.
+
+   Loan duration group is significantly associated with credit risk in this dataset. 
+   The percentage of Risk borrowers increases from 8.45% in the Short Term group to 55.31% in the Long Term group.
+   This is an important business insight because longer repayment periods create more uncertainty for lenders. 
+   A long-term loan remains active for more time, which increases the chance that the borrower's financial
+   situation may change before the loan is fully repaid. Hence long-term loans may need stronger risk assessment, closer monitoring, or additional approval
+   criteria compared with short-term loans.
+ */
+ 
 /* 
-   Test 7: Credit History and Credit Risk
+   test 7: Is credit history associated with credit risk?
+   Credit history is expected to be one of the strongest indicators of default risk. 
+   Borrowers with delayed payments or outstanding credit may have a higher probability of being risky.
 
-   Research question:
-   Is credit history associated with credit risk?
-
-   Why this question matters:
-   Credit history is expected to be one of the strongest indicators
-   of default risk. Borrowers with delayed payments or outstanding
-   credit may have a higher probability of being risky.
-
-   Variables:
-   CreditHistory = categorical variable
-   Risk          = categorical variable
-
-   Test type:
-   Chi-square test of independence
-
+   Variables: CreditHistory = categorical variable, Risk = categorical variable
    H0: Credit history and credit risk are independent.
    H1: Credit history and credit risk are associated.
  */
+
 
 title "Chi-Square Test 4: Association Between Credit History and Credit Risk";
 
 proc freq data=work.cred_clean;
     tables CreditHistory*Risk / chisq expected cellchi2;
 run;
+
+
+
+
+
+
+
+
+
+/* continue to check from here */
+/* Test 7 Interpretation: Credit History and Credit Risk
+
+   Research question:
+   Is credit history associated with credit risk?
+
+   Test type:
+   Chi-square test of independence
+
+   Variables:
+   CreditHistory = categorical variable
+   Risk          = categorical variable
+
+   Hypotheses:
+   H0: Credit history and credit risk are independent.
+       This means the proportion of Risk and No Risk borrowers is the
+       same across all credit history categories.
+
+   H1: Credit history and credit risk are associated.
+       This means credit risk differs across credit history categories.
+
+   How to read the table:
+   SAS reports several values inside each cell:
+
+       Frequency       = actual observed count
+       Expected        = expected count if CreditHistory and Risk were independent
+       Cell Chi-Square = how much that cell contributes to the chi-square statistic
+       Percent         = percent of the full dataset
+       Row Pct         = percent within that credit history category
+       Col Pct         = percent within that risk group
+
+   The most useful value for business interpretation here is Row Pct,
+   because it shows the percentage of Risk and No Risk borrowers inside
+   each credit history category.
+
+   Descriptive results by credit history category:
+
+   For borrowers with all credits paid back:
+       No Risk = 717 borrowers
+       Risk    = 52 borrowers
+       Risk row percentage = 6.76%
+
+   This means that only 6.76% of borrowers with all credits paid back
+   are classified as Risk.
+
+   For borrowers with credits paid to date:
+       No Risk = 1171 borrowers
+       Risk    = 319 borrowers
+       Risk row percentage = 21.41%
+
+   This means that 21.41% of borrowers with credits paid to date are
+   classified as Risk.
+
+   For borrowers with no credits:
+       No Risk = 117 borrowers
+       Risk    = 0 borrowers
+       Risk row percentage = 0.00%
+
+   In this dataset, borrowers with no credits are all classified as
+   No Risk. This should be interpreted carefully because this category
+   is relatively small compared with the other groups.
+
+   For borrowers with outstanding credit:
+       No Risk = 319 borrowers
+       Risk    = 619 borrowers
+       Risk row percentage = 65.99%
+
+   This means that 65.99% of borrowers with outstanding credit are
+   classified as Risk.
+
+   For borrowers with prior payments delayed:
+       No Risk = 1006 borrowers
+       Risk    = 680 borrowers
+       Risk row percentage = 40.33%
+
+   This means that 40.33% of borrowers with prior delayed payments are
+   classified as Risk.
+
+   These row percentages show a clear pattern: borrowers with stronger
+   repayment histories have much lower risk percentages, while borrowers
+   with outstanding credit or prior delayed payments have much higher
+   risk percentages.
+
+   Expected counts:
+   The expected counts show what SAS would expect if credit history and
+   credit risk were independent.
+
+   For example, in the outstanding_credit group:
+       Expected Risk count = 313.29
+       Actual Risk count   = 619
+
+   This means there are far more Risk borrowers with outstanding credit
+   than would be expected if credit history and risk were independent.
+
+   In the all_credits_paid_back group:
+       Expected Risk count = 256.85
+       Actual Risk count   = 52
+
+   This means there are far fewer Risk borrowers with all credits paid
+   back than would be expected if credit history and risk were independent.
+
+   Chi-square test result:
+   The Pearson Chi-Square result is:
+
+       Chi-Square = 884.6183
+       DF = 4
+       Prob < .0001
+
+   The p-value is less than 0.05, so we reject the null hypothesis.
+   There is statistically significant evidence that CreditHistory and
+   Risk are associated.
+
+   Strength of association:
+   Cramer's V = 0.4206
+
+   Cramer's V measures the strength of association between two categorical
+   variables. A value around 0.42 suggests a moderate to strong association
+   in this dataset.
+
+   Final conclusion:
+   Credit history is significantly associated with credit risk in this
+   dataset. Borrowers with all credits paid back or credits paid to date
+   have much lower risk percentages, while borrowers with outstanding
+   credit and prior delayed payments have much higher risk percentages.
+
+   This is an important business insight because credit history reflects
+   a borrower's past repayment behavior. Borrowers with outstanding credit
+   or delayed payment history may require closer risk assessment, stricter
+   approval rules, or additional monitoring.
+
+   Therefore, CreditHistory should be considered one of the important
+   variables in later modeling and business recommendations.
+  */
 
 
 /*
